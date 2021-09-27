@@ -45,7 +45,7 @@ namespace ImportFile.Api.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
-            if (file.Length <= 0)
+            if (file == null || file.Length <= 0)
                 return BadRequest();
 
             var streamFile = file.OpenReadStream();
