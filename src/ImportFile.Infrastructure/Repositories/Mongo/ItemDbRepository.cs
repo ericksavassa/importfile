@@ -19,35 +19,65 @@ namespace ImportFile.Infrastructure.Repositories.Mongo
 
         public async Task Create(Item item)
         {
-            await this.Context.Items.InsertOneAsync(item);
+            try
+            {
+                await this.Context.Items.InsertOneAsync(item);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error trying to save data into mongoDb!");
+            }
         }
 
         public async Task<bool> Update(Item item)
         {
-            ReplaceOneResult updateResult =
-                await this.Context
-                        .Items
-                        .ReplaceOneAsync(
-                            filter: g => g.Key == item.Key,
-                            replacement: item);
-            return updateResult.IsAcknowledged
-                    && updateResult.ModifiedCount > 0;
+            try
+            {
+                ReplaceOneResult updateResult =
+               await this.Context
+                       .Items
+                       .ReplaceOneAsync(
+                           filter: g => g.Key == item.Key,
+                           replacement: item);
+                return updateResult.IsAcknowledged
+                        && updateResult.ModifiedCount > 0;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error trying to save data into mongoDb!");
+            }
+
         }
 
         public async Task<IEnumerable<Item>> GetAll()
         {
-            var records = await this.Context
+            try
+            {
+                var records = await this.Context
                           .Items
                           .Find(_ => true)
                           .ToListAsync();
-            return records;
+                return records;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error trying to get data from mongoDb!");
+            }
+
         }
 
         public async Task<Item> GetByKey(string key)
         {
-            Expression<Func<Item, bool>> filter = x => x.Key.Equals(key);
-            Item item = await this.Context.Items.Find<Item>(filter).FirstOrDefaultAsync();
-            return item;
+            try
+            {
+                Expression<Func<Item, bool>> filter = x => x.Key.Equals(key);
+                Item item = await this.Context.Items.Find<Item>(filter).FirstOrDefaultAsync();
+                return item;
+            }
+            catch
+            {
+                throw new Exception("Error trying to get data from mongoDb!");
+            }
         }
     }
 }

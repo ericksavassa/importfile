@@ -18,9 +18,9 @@ namespace ImportFile.Infrastructure.CSVClient
                 var records = csvReader.GetRecords<T>().ToList();
                 return records;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Error trying to read csv file!");
             }
         }
     }
