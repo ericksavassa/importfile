@@ -42,7 +42,7 @@ namespace ImportFile.Api.Controllers
             return Ok(item);
         }
 
-        [HttpPost]
+        [HttpPost, DisableRequestSizeLimit]
         public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
             if (file.Length <= 0)
